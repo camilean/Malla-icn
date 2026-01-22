@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Malla Interactiva</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <h1>Mi malla interactiva</h1>
+    <p class="sub">Marca ramos como aprobados y se desbloquean los siguientes.</p>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <h2>Controles</h2>
+      <button id="btnReset" class="btn">Reiniciar progreso</button>
+      <div class="stats">
+        <div><strong id="countAprobados">0</strong> aprobados</div>
+        <div><strong id="countTotal">0</strong> total</div>
+      </div>
+    </section>
+
+    <section class="malla" id="malla"></section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
