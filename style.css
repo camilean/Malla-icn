@@ -1,0 +1,109 @@
+:root{
+  --bg:#0b1020;
+  --card:#121a33;
+  --muted:#91a0c7;
+  --text:#eef2ff;
+  --ok:#22c55e;
+  --lock:#f97316;
+  --border:rgba(255,255,255,.12);
+}
+
+*{ box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+body{ margin:0; background:var(--bg); color:var(--text); }
+
+.top{ padding:28px 16px; border-bottom:1px solid var(--border); }
+.top h1{ margin:0 0 6px; font-size:28px; }
+.sub{ margin:0; color:var(--muted); }
+
+.container{
+  display:grid;
+  grid-template-columns: 280px 1fr;
+  gap:16px;
+  padding:16px;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.panel{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+  position:sticky;
+  top:16px;
+  height:fit-content;
+}
+
+.btn{
+  width:100%;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text);
+  cursor:pointer;
+}
+.btn:hover{ border-color: rgba(255,255,255,.25); }
+
+.stats{
+  margin-top:12px;
+  display:flex;
+  gap:10px;
+  flex-direction:column;
+  color:var(--muted);
+}
+
+.malla{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap:12px;
+}
+
+.semestre{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:12px;
+}
+
+.semestre h3{ margin:0 0 10px; font-size:16px; color:var(--muted); }
+
+.ramo{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:10px;
+  margin-bottom:10px;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.ramo:last-child{ margin-bottom:0; }
+
+.tag{
+  font-size:12px;
+  padding:2px 8px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  color:var(--muted);
+  width:max-content;
+}
+
+.ramo .info{ flex:1; }
+.ramo .nombre{ font-weight:700; margin:0 0 6px; }
+.ramo .meta{ margin:0; color:var(--muted); font-size:13px; }
+
+.ramo.aprobado{
+  outline:2px solid rgba(34,197,94,.45);
+}
+.ramo.aprobado .tag{ color:var(--ok); border-color: rgba(34,197,94,.35); }
+
+.ramo.bloqueado{
+  opacity:.6;
+}
+.ramo.bloqueado .tag{ color:var(--lock); border-color: rgba(249,115,22,.35); }
+
+@media (max-width: 900px){
+  .container{ grid-template-columns: 1fr; }
+  .panel{ position:relative; top:auto; }
+}
