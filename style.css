@@ -3,9 +3,24 @@
   --card:#121a33;
   --muted:#91a0c7;
   --text:#eef2ff;
-  --ok:#22c55e;
-  --lock:#f97316;
   --border:rgba(255,255,255,.12);
+  --shadow: 0 12px 30px rgba(0,0,0,.35);
+
+  /* Colores por área (según tu imagen) */
+  --ciencias:#B090C8;
+  --agua:#98C0E0;
+  --estructuras:#F08000;
+  --gestion:#C0D8B0;
+  --tecnologias:#F8E880;
+  --integracion:#F898F8;
+  --desarrollo:#F8D0A8;
+  --optativos:#B0B0B0;
+  --ff:#B07070;
+  --ingles:#D0A8A8;
+
+  --ok:#22c55e;
+  --warn:#f59e0b;
+  --lock:#fb923c;
 }
 
 *{ box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
@@ -17,27 +32,43 @@ body{ margin:0; background:var(--bg); color:var(--text); }
 
 .container{
   display:grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 320px 1fr;
   gap:16px;
   padding:16px;
-  max-width:1200px;
+  max-width:1280px;
   margin:0 auto;
 }
 
 .panel{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:14px;
+  border-radius:16px;
   padding:14px;
   position:sticky;
   top:16px;
   height:fit-content;
+  box-shadow: var(--shadow);
 }
+
+.input, .select{
+  width:100%;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+  color:var(--text);
+  outline:none;
+}
+.input::placeholder{ color: rgba(238,242,255,.55); }
+.select{ cursor:pointer; }
+
+.row{ display:flex; gap:10px; margin-top:10px; }
+.row > *{ flex:1; }
 
 .btn{
   width:100%;
   padding:10px 12px;
-  border-radius:10px;
+  border-radius:12px;
   border:1px solid var(--border);
   background:transparent;
   color:var(--text);
@@ -52,58 +83,84 @@ body{ margin:0; background:var(--bg); color:var(--text); }
   flex-direction:column;
   color:var(--muted);
 }
+.hint{ margin:12px 0 0; color:rgba(238,242,255,.65); font-size:13px; line-height:1.35; }
 
 .malla{
   display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap:12px;
 }
 
 .semestre{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:14px;
+  border-radius:16px;
   padding:12px;
+  box-shadow: var(--shadow);
 }
-
-.semestre h3{ margin:0 0 10px; font-size:16px; color:var(--muted); }
+.semestre h3{ margin:0 0 10px; font-size:15px; color:var(--muted); }
 
 .ramo{
   border:1px solid var(--border);
-  border-radius:12px;
+  border-radius:14px;
   padding:10px;
   margin-bottom:10px;
   display:flex;
   gap:10px;
   align-items:flex-start;
+  cursor:pointer;
+  transition: transform .08s ease, border-color .15s ease, opacity .15s ease;
+  background: rgba(255,255,255,.02);
 }
-
+.ramo:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); }
 .ramo:last-child{ margin-bottom:0; }
 
-.tag{
+.badge{
   font-size:12px;
-  padding:2px 8px;
+  padding:3px 9px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,.18);
+  color:#101427;
+  width:max-content;
+  font-weight:700;
+}
+
+.ramo .info{ flex:1; }
+.ramo .nombre{ font-weight:800; margin:0 0 6px; letter-spacing:.2px; }
+.ramo .meta{ margin:0; color:var(--muted); font-size:13px; line-height:1.3; }
+
+.status{
+  font-size:12px;
+  padding:3px 8px;
   border-radius:999px;
   border:1px solid var(--border);
   color:var(--muted);
   width:max-content;
+  margin-top:8px;
 }
 
-.ramo .info{ flex:1; }
-.ramo .nombre{ font-weight:700; margin:0 0 6px; }
-.ramo .meta{ margin:0; color:var(--muted); font-size:13px; }
+.ramo.aprobado{ outline:2px solid rgba(34,197,94,.45); }
+.ramo.aprobado .status{ color: var(--ok); border-color: rgba(34,197,94,.35); }
 
-.ramo.aprobado{
-  outline:2px solid rgba(34,197,94,.45);
-}
-.ramo.aprobado .tag{ color:var(--ok); border-color: rgba(34,197,94,.35); }
+.ramo.curso{ outline:2px solid rgba(245,158,11,.35); }
+.ramo.curso .status{ color: var(--warn); border-color: rgba(245,158,11,.35); }
 
-.ramo.bloqueado{
-  opacity:.6;
-}
-.ramo.bloqueado .tag{ color:var(--lock); border-color: rgba(249,115,22,.35); }
+.ramo.bloqueado{ opacity:.55; cursor:not-allowed; }
+.ramo.bloqueado .status{ color: var(--lock); border-color: rgba(251,146,60,.35); }
 
-@media (max-width: 900px){
+/* Área (color tipo "tarjeta" como tu malla) */
+.area-ciencias .badge{ background: var(--ciencias); }
+.area-agua .badge{ background: var(--agua); }
+.area-estructuras .badge{ background: var(--estructuras); }
+.area-gestion .badge{ background: var(--gestion); }
+.area-tecnologias .badge{ background: var(--tecnologias); }
+.area-integracion .badge{ background: var(--integracion); }
+.area-desarrollo .badge{ background: var(--desarrollo); }
+.area-optativos .badge{ background: var(--optativos); }
+.area-ff .badge{ background: var(--ff); color: #fff; }
+.area-ingles .badge{ background: var(--ingles); }
+
+@media (max-width: 980px){
   .container{ grid-template-columns: 1fr; }
   .panel{ position:relative; top:auto; }
 }
