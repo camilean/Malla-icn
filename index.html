@@ -9,7 +9,10 @@
 <body>
   <header class="top">
     <h1>Malla Interactiva ICN</h1>
-    <p class="sub">Click en un ramo para cambiar: Pendiente → En curso → Aprobado. Los prerrequisitos bloquean automáticamente.</p>
+    <p class="sub">
+      Tu progreso se guarda en tu dispositivo automáticamente.
+      Si cambias de celular/PC, usa <strong>Exportar</strong> y luego <strong>Importar</strong>.
+    </p>
   </header>
 
   <main class="container">
@@ -29,13 +32,14 @@
       </div>
 
       <div class="row">
-        <button id="btnReset" class="btn">Reiniciar progreso</button>
+        <button id="btnCopyLink" class="btn">Copiar link</button>
+        <button id="btnReset" class="btn">Reiniciar</button>
       </div>
 
       <div class="row">
-        <button id="btnExport" class="btn">Exportar progreso</button>
+        <button id="btnExport" class="btn">Exportar</button>
         <label class="btn file-btn">
-          Importar progreso
+          Importar
           <input id="fileImport" type="file" accept="application/json" hidden />
         </label>
       </div>
@@ -47,8 +51,9 @@
       </div>
 
       <p class="hint">
-        Consejo CE: el progreso se guarda automáticamente en el navegador.
-        Para cambiar de celular/PC o respaldar, usa <strong>Exportar</strong> y luego <strong>Importar</strong>.
+        En celular: abre un semestre y marca tus ramos con los botones.
+        <br/>
+        <strong>Bloqueado</strong> = faltan prerrequisitos.
       </p>
     </section>
 
@@ -56,6 +61,9 @@
   </main>
 
   <script src="script.js"></script>
+</body>
+</html>
+ipt.js"></script>
 </body>
 </html>
 
