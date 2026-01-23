@@ -3,46 +3,54 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Malla Interactiva</title>
+  <title>Malla Interactiva ICN</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="top">
-    <h1>Mi malla interactiva</h1>
-    <p class="sub">Marca ramos como aprobados y se desbloquean los siguientes.</p>
+    <h1>Malla Interactiva ICN</h1>
+    <p class="sub">Click en un ramo para cambiar: Pendiente → En curso → Aprobado. Los prerrequisitos bloquean automáticamente.</p>
   </header>
 
   <main class="container">
     <section class="panel">
-  <h2>Controles</h2>
+      <h2>Controles</h2>
 
-  <input id="search" class="input" type="text" placeholder="Buscar por código o nombre..." />
+      <input id="search" class="input" type="text" placeholder="Buscar por código o nombre..." />
 
-  <div class="row">
-    <select id="filterSem" class="select">
-      <option value="all">Todos los semestres</option>
-    </select>
+      <div class="row">
+        <select id="filterSem" class="select">
+          <option value="all">Todos los semestres</option>
+        </select>
 
-    <select id="filterArea" class="select">
-      <option value="all">Todas las áreas</option>
-    </select>
-  </div>
+        <select id="filterArea" class="select">
+          <option value="all">Todas las áreas</option>
+        </select>
+      </div>
 
-  <div class="row">
-    <button id="btnReset" class="btn">Reiniciar progreso</button>
-  </div>
+      <div class="row">
+        <button id="btnReset" class="btn">Reiniciar progreso</button>
+      </div>
 
-  <div class="stats">
-    <div><strong id="countAprobados">0</strong> aprobados</div>
-    <div><strong id="countCurso">0</strong> en curso</div>
-    <div><strong id="countTotal">0</strong> total</div>
-  </div>
+      <div class="row">
+        <button id="btnExport" class="btn">Exportar progreso</button>
+        <label class="btn file-btn">
+          Importar progreso
+          <input id="fileImport" type="file" accept="application/json" hidden />
+        </label>
+      </div>
 
-  <p class="hint">
-    Tip: haz click en un ramo para cambiar estado: Pendiente → En curso → Aprobado.
-  </p>
-</section>
+      <div class="stats">
+        <div><strong id="countAprobados">0</strong> aprobados</div>
+        <div><strong id="countCurso">0</strong> en curso</div>
+        <div><strong id="countTotal">0</strong> total</div>
+      </div>
 
+      <p class="hint">
+        Consejo CE: el progreso se guarda automáticamente en el navegador.
+        Para cambiar de celular/PC o respaldar, usa <strong>Exportar</strong> y luego <strong>Importar</strong>.
+      </p>
+    </section>
 
     <section class="malla" id="malla"></section>
   </main>
@@ -50,3 +58,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
