@@ -1,25 +1,39 @@
-const STORAGE_KEY = "malla_estado_pro_v1";
+const STORAGE_KEY = "malla_estado_ce_v1";
+
+/** Nombres bonitos de área */
+const areaLabels = {
+  ciencias: "Ciencias Básicas",
+  agua: "Agua y Medioambiente",
+  estructuras: "Estructuras y Geotecnia",
+  gestion: "Gestión de Proyectos",
+  tecnologias: "Tecnologías",
+  integracion: "Proyectos de Integración",
+  desarrollo: "Desarrollo Personal",
+  optativos: "Optativos",
+  ff: "Formación Fundamental",
+  ingles: "Programa Inglés",
+};
 
 /**
  * area: ciencias | agua | estructuras | gestion | tecnologias | integracion | desarrollo | optativos | ff | ingles
- * estado guardado por id: "pendiente" | "curso" | "aprobado"
+ * estado: pendiente | curso | aprobado (guardado en localStorage por usuario)
  */
 const ramos = [
-  // I Semestre
+  // 1
   { id:"MAT1001", nombre:"Fundamentos de Matemáticas para Ingeniería", semestre:1, creditos:0, area:"ciencias", prereq:[] },
   { id:"FIN0100", nombre:"Desarrollo Integral y Comunicación para Ingeniería", semestre:1, creditos:0, area:"desarrollo", prereq:[] },
   { id:"FIS1035", nombre:"Introducción a la Física", semestre:1, creditos:0, area:"ciencias", prereq:[] },
   { id:"ICN111",  nombre:"Introducción a la Ingeniería Civil en Construcción", semestre:1, creditos:0, area:"integracion", prereq:[] },
   { id:"ANT_CRIS",nombre:"Antropología Cristiana", semestre:1, creditos:0, area:"ff", prereq:[] },
 
-  // II Semestre
+  // 2
   { id:"MAT1002", nombre:"Cálculo Integral y Diferencial", semestre:2, creditos:0, area:"ciencias", prereq:["MAT1001"] },
   { id:"MAT1004", nombre:"Álgebra Lineal", semestre:2, creditos:0, area:"ciencias", prereq:["MAT1001"] },
   { id:"FIS1002", nombre:"Física para Ingeniería", semestre:2, creditos:0, area:"ciencias", prereq:["FIS1035"] },
   { id:"ICN123",  nombre:"Fundamentos de Química", semestre:2, creditos:0, area:"ciencias", prereq:["ICN111"] },
   { id:"ICN121",  nombre:"Dibujo de Ingeniería", semestre:2, creditos:0, area:"tecnologias", prereq:["ICN111"] },
 
-  // III Semestre
+  // 3
   { id:"MAT1003", nombre:"Cálculo en Varias Variables", semestre:3, creditos:0, area:"ciencias", prereq:["MAT1002"] },
   { id:"FIS1037", nombre:"Física General: Termodinámica y Ondas", semestre:3, creditos:0, area:"ciencias", prereq:["MAT1002"] },
   { id:"ICN213",  nombre:"Ciencia de los Materiales", semestre:3, creditos:0, area:"estructuras", prereq:["ICN123"] },
@@ -27,7 +41,7 @@ const ramos = [
   { id:"ICN215",  nombre:"Geomensura", semestre:3, creditos:0, area:"tecnologias", prereq:["ICN121"] },
   { id:"ING9001", nombre:"Inglés 1", semestre:3, creditos:0, area:"ingles", prereq:[] },
 
-  // IV Semestre
+  // 4
   { id:"MAT1005", nombre:"Ecuaciones Diferenciales", semestre:4, creditos:0, area:"ciencias", prereq:["MAT1002"] },
   { id:"FIS1038", nombre:"Física General: Electromagnetismo", semestre:4, creditos:0, area:"ciencias", prereq:["FIS1037"] },
   { id:"ICN221",  nombre:"Mecánica de Sólidos", semestre:4, creditos:0, area:"estructuras", prereq:["ICN213"] },
@@ -35,7 +49,7 @@ const ramos = [
   { id:"ING9002", nombre:"Inglés 2", semestre:4, creditos:0, area:"ingles", prereq:["ING9001"] },
   { id:"FF1",     nombre:"Formación Fundamental 1", semestre:4, creditos:0, area:"ff", prereq:[] },
 
-  // V Semestre
+  // 5
   { id:"ICN311",  nombre:"Programación y Métodos Numéricos", semestre:5, creditos:0, area:"ciencias", prereq:["MAT1003"] },
   { id:"ICN312",  nombre:"Mecánica de Fluidos", semestre:5, creditos:0, area:"agua", prereq:["MAT1005"] },
   { id:"ICN313",  nombre:"Geotecnia 1", semestre:5, creditos:0, area:"estructuras", prereq:["ICN213"] },
@@ -43,7 +57,7 @@ const ramos = [
   { id:"ING9003", nombre:"Inglés 3", semestre:5, creditos:0, area:"ingles", prereq:["ING9002"] },
   { id:"FF2",     nombre:"Formación Fundamental 2", semestre:5, creditos:0, area:"ff", prereq:[] },
 
-  // VI Semestre
+  // 6
   { id:"ICN321",  nombre:"Tecnología de Materiales", semestre:6, creditos:0, area:"tecnologias", prereq:["ICN213"] },
   { id:"ICN322",  nombre:"Ingeniería Hidráulica e Hidrología", semestre:6, creditos:0, area:"agua", prereq:["ICN312"] },
   { id:"ICN323",  nombre:"Geotecnia 2", semestre:6, creditos:0, area:"estructuras", prereq:["ICN313"] },
@@ -51,7 +65,7 @@ const ramos = [
   { id:"ING9004", nombre:"Inglés 4", semestre:6, creditos:0, area:"ingles", prereq:["ING9003"] },
   { id:"FF3",     nombre:"Formación Fundamental 3", semestre:6, creditos:0, area:"ff", prereq:[] },
 
-  // VII Semestre
+  // 7
   { id:"ICN411",  nombre:"Ingeniería Económica", semestre:7, creditos:0, area:"gestion", prereq:["ICN314"] },
   { id:"ICN409",  nombre:"Ingeniería Ambiental y Sanitaria", semestre:7, creditos:0, area:"agua", prereq:["ICN322"] },
   { id:"ICN413",  nombre:"Maquinarias y Movimientos de Tierra", semestre:7, creditos:0, area:"gestion", prereq:["ICN215","ICN313"] },
@@ -59,7 +73,7 @@ const ramos = [
   { id:"ICN415",  nombre:"Sistema Integrado de Gestión", semestre:7, creditos:0, area:"gestion", prereq:["ICN314"] },
   { id:"ICN410",  nombre:"Diseño de Sistemas y Procesos Constructivos", semestre:7, creditos:0, area:"tecnologias", prereq:["ICN321"] },
 
-  // VIII Semestre
+  // 8
   { id:"ICN421",  nombre:"Investigación de Operaciones", semestre:8, creditos:0, area:"gestion", prereq:["ICN311"] },
   { id:"ICN430",  nombre:"Diseño de Obras Lineales", semestre:8, creditos:0, area:"integracion", prereq:["ICN313"] },
   { id:"ICN432",  nombre:"Diseño y Construcción en Acero", semestre:8, creditos:0, area:"estructuras", prereq:["ICN325"] },
@@ -68,7 +82,7 @@ const ramos = [
   { id:"ICN435",  nombre:"Diseño de Instalaciones y Equipamientos", semestre:8, creditos:0, area:"tecnologias", prereq:["ICN410"] },
   { id:"ETI_CRIS",nombre:"Ética Cristiana", semestre:8, creditos:0, area:"ff", prereq:[] },
 
-  // IX Semestre
+  // 9
   { id:"ICN511",  nombre:"Finanzas", semestre:9, creditos:0, area:"gestion", prereq:["ICN411"] },
   { id:"ICN512",  nombre:"Project Management 1", semestre:9, creditos:0, area:"gestion", prereq:["ICN415"] },
   { id:"ICN530",  nombre:"Análisis de Sistemas y Transporte", semestre:9, creditos:0, area:"estructuras", prereq:["ICN432","ICN433"] },
@@ -76,7 +90,7 @@ const ramos = [
   { id:"ICN532",  nombre:"Diseño de Obras de Infraestructuras", semestre:9, creditos:0, area:"integracion", prereq:["ICN433","ICN434"] },
   { id:"ICN516",  nombre:"Planificación y Control de Proyectos", semestre:9, creditos:0, area:"gestion", prereq:["ICN435"] },
 
-  // X Semestre
+  // 10
   { id:"ICN533",  nombre:"Legislación Aplicada", semestre:10, creditos:0, area:"gestion", prereq:["ICN511"] },
   { id:"ICN522",  nombre:"Construcciones Marítimas y Fluviales", semestre:10, creditos:0, area:"agua", prereq:["ICN432","ICN433"] },
   { id:"ICN534",  nombre:"Proyecto de Obras Civiles", semestre:10, creditos:0, area:"integracion", prereq:["ICN532"] },
@@ -84,7 +98,7 @@ const ramos = [
   { id:"ICN525",  nombre:"Project Management 2", semestre:10, creditos:0, area:"gestion", prereq:["ICN512"] },
   { id:"OPT1",    nombre:"Optativo 1", semestre:10, creditos:0, area:"optativos", prereq:[] },
 
-  // XI Semestre
+  // 11
   { id:"ICN611",  nombre:"Proyecto de Título", semestre:11, creditos:0, area:"integracion", prereq:["ICN534","ICN535"] },
   { id:"OPT2",    nombre:"Optativo 2", semestre:11, creditos:0, area:"optativos", prereq:[] },
   { id:"OPT3",    nombre:"Optativo 3", semestre:11, creditos:0, area:"optativos", prereq:[] },
@@ -115,8 +129,10 @@ elFilterSem.addEventListener("change", render);
 elFilterArea.addEventListener("change", render);
 
 initFilters();
+initExportImport();
 render();
 
+/* -------------------- storage -------------------- */
 function cargarEstado() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
   catch { return {}; }
@@ -124,29 +140,25 @@ function cargarEstado() {
 function guardarEstado() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
 }
-
-function getEstado(id){
-  return estado[id] || "pendiente";
-}
+function getEstado(id){ return estado[id] || "pendiente"; }
 function setEstado(id, value){
   if (value === "pendiente") delete estado[id];
   else estado[id] = value;
 }
-
 function esAprobado(id){ return getEstado(id) === "aprobado"; }
 
+/* -------------------- prerequisitos -------------------- */
 function prereqCumplidos(ramo) {
   return (ramo.prereq || []).every(esAprobado);
 }
-
 function cicloEstado(actual){
   if (actual === "pendiente") return "curso";
   if (actual === "curso") return "aprobado";
   return "pendiente";
 }
 
+/* -------------------- filtros -------------------- */
 function initFilters(){
-  // semestres
   const semestres = [...new Set(ramos.map(r => r.semestre))].sort((a,b)=>a-b);
   for (const s of semestres){
     const op = document.createElement("option");
@@ -154,20 +166,6 @@ function initFilters(){
     op.textContent = `Semestre ${s}`;
     elFilterSem.appendChild(op);
   }
-
-  // áreas
-  const areaLabels = {
-    ciencias:"Ciencias Básicas",
-    agua:"Agua y Medioambiente",
-    estructuras:"Estructuras y Geotecnia",
-    gestion:"Gestión de Proyectos",
-    tecnologias:"Tecnologías",
-    integracion:"Proyectos de Integración",
-    desarrollo:"Desarrollo Personal",
-    optativos:"Optativos",
-    ff:"Formación Fundamental",
-    ingles:"Programa Inglés",
-  };
 
   const areas = [...new Set(ramos.map(r => r.area))].sort();
   for (const a of areas){
@@ -178,6 +176,7 @@ function initFilters(){
   }
 }
 
+/* -------------------- render -------------------- */
 function agruparPorSemestre(lista) {
   const map = new Map();
   for (const r of lista) {
@@ -200,7 +199,7 @@ function render() {
     r.id.toLowerCase().includes(q) || r.nombre.toLowerCase().includes(q)
   );
 
-  // stats globales (sobre TODOS)
+  // stats globales
   const aprobados = ramos.filter(r => getEstado(r.id) === "aprobado").length;
   const enCurso = ramos.filter(r => getEstado(r.id) === "curso").length;
 
@@ -220,7 +219,12 @@ function render() {
     for (const ramo of lista) {
       const est = getEstado(ramo.id);
       const ok = prereqCumplidos(ramo) || (ramo.prereq.length === 0);
-      const bloqueado = (!ok && est !== "aprobado" && est !== "curso");
+      const bloqueado = (!ok && est === "pendiente");
+
+      const statusText =
+        est === "aprobado" ? "Aprobado" :
+        est === "curso" ? "En curso" :
+        (bloqueado ? "Bloqueado" : "Pendiente");
 
       const card = document.createElement("div");
       card.className = [
@@ -230,11 +234,6 @@ function render() {
         est === "curso" ? "curso" : "",
         bloqueado ? "bloqueado" : "",
       ].filter(Boolean).join(" ");
-
-      const statusText =
-        est === "aprobado" ? "Aprobado" :
-        est === "curso" ? "En curso" :
-        (bloqueado ? "Bloqueado" : "Pendiente");
 
       card.innerHTML = `
         <div class="info">
@@ -247,7 +246,7 @@ function render() {
       `;
 
       card.addEventListener("click", () => {
-        if (bloqueado) return; // si está bloqueado, no cambia
+        if (bloqueado) return;
         const next = cicloEstado(est);
         setEstado(ramo.id, next);
         guardarEstado();
@@ -258,5 +257,72 @@ function render() {
     }
 
     elMalla.appendChild(box);
+  }
+}
+
+/* -------------------- Export / Import (Opción A) -------------------- */
+function initExportImport(){
+  const btnExport = document.getElementById("btnExport");
+  const fileImport = document.getElementById("fileImport");
+
+  if (btnExport) {
+    btnExport.addEventListener("click", () => {
+      const payload = {
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        estado: estado
+      };
+
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "progreso-malla.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  if (fileImport) {
+    fileImport.addEventListener("change", async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      try {
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+
+        const importedEstado = parsed?.estado && typeof parsed.estado === "object"
+          ? parsed.estado
+          : parsed;
+
+        if (!importedEstado || typeof importedEstado !== "object") {
+          alert("Archivo inválido. No se pudo importar.");
+          return;
+        }
+
+        const idsValidos = new Set(ramos.map(r => r.id));
+        const limpio = {};
+
+        for (const [id, val] of Object.entries(importedEstado)) {
+          if (!idsValidos.has(id)) continue;
+          if (val !== "curso" && val !== "aprobado") continue;
+          limpio[id] = val;
+        }
+
+        estado = limpio;
+        guardarEstado();
+        render();
+        alert("¡Progreso importado con éxito!");
+      } catch {
+        alert("No se pudo importar. Asegúrate de subir un .json válido.");
+      } finally {
+        e.target.value = "";
+      }
+    });
   }
 }
