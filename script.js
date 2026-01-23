@@ -240,7 +240,7 @@ function render() {
         <div class="info">
           <p class="nombre">${ramo.nombre}</p>
           <p class="meta"><strong>${ramo.id}</strong>${ramo.creditos ? ` • ${ramo.creditos} créditos` : ""}</p>
-          <div class="badge">${ramo.area}</div>
+          <div class="badge">${areaLabels[ramo.area] || ramo.area}</div>
           <div class="status">${statusText}</div>
           ${ramo.prereq.length ? `<p class="meta">Prerreq: ${ramo.prereq.join(", ")}</p>` : ""}
         </div>
