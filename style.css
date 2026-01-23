@@ -149,16 +149,74 @@ body{ margin:0; background:var(--bg); color:var(--text); }
 .ramo.bloqueado .status{ color: var(--lock); border-color: rgba(251,146,60,.35); }
 
 /* Área (color tipo "tarjeta" como tu malla) */
-.area-ciencias .badge{ background: var(--ciencias); }
-.area-agua .badge{ background: var(--agua); }
-.area-estructuras .badge{ background: var(--estructuras); }
-.area-gestion .badge{ background: var(--gestion); }
-.area-tecnologias .badge{ background: var(--tecnologias); }
-.area-integracion .badge{ background: var(--integracion); }
-.area-desarrollo .badge{ background: var(--desarrollo); }
-.area-optativos .badge{ background: var(--optativos); }
-.area-ff .badge{ background: var(--ff); color: #fff; }
-.area-ingles .badge{ background: var(--ingles); }
+/* ===== TARJETA COMPLETA CON COLOR POR ÁREA ===== */
+.area-ciencias{
+  background: var(--ciencias);
+  color: #1b1033;
+}
+.area-agua{
+  background: var(--agua);
+  color: #0a2540;
+}
+.area-estructuras{
+  background: var(--estructuras);
+  color: #2b1400;
+}
+.area-gestion{
+  background: var(--gestion);
+  color: #0f2a12;
+}
+.area-tecnologias{
+  background: var(--tecnologias);
+  color: #2a2300;
+}
+.area-integracion{
+  background: var(--integracion);
+  color: #2b0030;
+}
+.area-desarrollo{
+  background: var(--desarrollo);
+  color: #3a1d00;
+}
+.area-optativos{
+  background: var(--optativos);
+  color: #1f1f1f;
+}
+.area-ff{
+  background: var(--ff);
+  color: #ffffff;
+}
+.area-ingles{
+  background: var(--ingles);
+  color: #2b1414;
+}
+
+/* Ajustes internos para que se lea bien */
+.ramo.area-ciencias,
+.ramo.area-agua,
+.ramo.area-estructuras,
+.ramo.area-gestion,
+.ramo.area-tecnologias,
+.ramo.area-integracion,
+.ramo.area-desarrollo,
+.ramo.area-optativos,
+.ramo.area-ff,
+.ramo.area-ingles{
+  border: none;
+}
+
+.ramo .meta,
+.ramo .status{
+  opacity: .9;
+}
+
+.ramo.aprobado{
+  outline: 3px solid rgba(0,0,0,.35);
+}
+.ramo.curso{
+  outline: 3px dashed rgba(0,0,0,.35);
+}
+
 
 @media (max-width: 980px){
   .container{ grid-template-columns: 1fr; }
