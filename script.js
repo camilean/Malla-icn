@@ -1,4 +1,4 @@
-const STORAGE_KEY = "malla_estado_ce_v1";
+const STORAGE_KEY = "malla_estado_ce_vfinal";
 
 /** Nombres bonitos de área */
 const areaLabels = {
@@ -15,8 +15,9 @@ const areaLabels = {
 };
 
 /**
- * area: ciencias | agua | estructuras | gestion | tecnologias | integracion | desarrollo | optativos | ff | ingles
- * estado: pendiente | curso | aprobado (guardado en localStorage por usuario)
+ * ramos:
+ * - area: ciencias | agua | estructuras | gestion | tecnologias | integracion | desarrollo | optativos | ff | ingles
+ * - estado guardado: pendiente | curso | aprobado
  */
 const ramos = [
   // 1
@@ -92,7 +93,7 @@ const ramos = [
 
   // 10
   { id:"ICN533",  nombre:"Legislación Aplicada", semestre:10, creditos:0, area:"gestion", prereq:["ICN511"] },
-  { id:"ICN522",  nombre:"Construcciones Marítimas y Fluviales", semestre:10, creditos:0, area:"agua", prereq:["ICN432","ICN433"] },
+  { id:"ICN522",  nombre:"Construcciones Marítmas y Fluviales", semestre:10, creditos:0, area:"agua", prereq:["ICN432","ICN433"] },
   { id:"ICN534",  nombre:"Proyecto de Obras Civiles", semestre:10, creditos:0, area:"integracion", prereq:["ICN532"] },
   { id:"ICN535",  nombre:"Evaluación de Proyectos", semestre:10, creditos:0, area:"gestion", prereq:["ICN516"] },
   { id:"ICN525",  nombre:"Project Management 2", semestre:10, creditos:0, area:"gestion", prereq:["ICN512"] },
@@ -124,6 +125,22 @@ document.getElementById("btnReset").addEventListener("click", () => {
   }
 });
 
+document.getElementById("btnCopyLink").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(location.href);
+    alert("¡Link copiado!");
+  } catch {
+    // fallback
+    const temp = document.createElement("input");
+    temp.value = location.href;
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand("copy");
+    temp.remove();
+    alert("¡Link copiado!");
+  }
+});
+
 elSearch.addEventListener("input", render);
 elFilterSem.addEventListener("change", render);
 elFilterArea.addEventListener("change", render);
@@ -151,10 +168,10 @@ function esAprobado(id){ return getEstado(id) === "aprobado"; }
 function prereqCumplidos(ramo) {
   return (ramo.prereq || []).every(esAprobado);
 }
-function cicloEstado(actual){
-  if (actual === "pendiente") return "curso";
-  if (actual === "curso") return "aprobado";
-  return "pendiente";
+
+/* ramos que dependen de otro (para mostrar desbloqueos) */
+function idsQueDependenDe(id){
+  return ramos.filter(r => r.prereq.includes(id)).map(r => r.id);
 }
 
 /* -------------------- filtros -------------------- */
@@ -199,7 +216,6 @@ function render() {
     r.id.toLowerCase().includes(q) || r.nombre.toLowerCase().includes(q)
   );
 
-  // stats globales
   const aprobados = ramos.filter(r => getEstado(r.id) === "aprobado").length;
   const enCurso = ramos.filter(r => getEstado(r.id) === "curso").length;
 
@@ -214,7 +230,22 @@ function render() {
   for (const [sem, lista] of grupos) {
     const box = document.createElement("div");
     box.className = "semestre";
-    box.innerHTML = `<h3>Semestre ${sem}</h3>`;
+
+    box.innerHTML = `
+      <button class="sem-header">
+        <span>Semestre ${sem}</span>
+        <span class="arrow">▼</span>
+      </button>
+      <div class="sem-body open"></div>
+    `;
+
+    const body = box.querySelector(".sem-body");
+    const header = box.querySelector(".sem-header");
+
+    header.addEventListener("click", () => {
+      body.classList.toggle("open");
+      box.classList.toggle("open");
+    });
 
     for (const ramo of lista) {
       const est = getEstado(ramo.id);
@@ -226,6 +257,8 @@ function render() {
         est === "curso" ? "En curso" :
         (bloqueado ? "Bloqueado" : "Pendiente");
 
+      const desbloquea = (est === "aprobado" && idsQueDependenDe(ramo.id).length > 0);
+
       const card = document.createElement("div");
       card.className = [
         "ramo",
@@ -233,34 +266,58 @@ function render() {
         est === "aprobado" ? "aprobado" : "",
         est === "curso" ? "curso" : "",
         bloqueado ? "bloqueado" : "",
+        desbloquea ? "desbloquea" : "",
       ].filter(Boolean).join(" ");
 
       card.innerHTML = `
         <div class="info">
           <p class="nombre">${ramo.nombre}</p>
           <p class="meta"><strong>${ramo.id}</strong>${ramo.creditos ? ` • ${ramo.creditos} créditos` : ""}</p>
+
           <div class="badge">${areaLabels[ramo.area] || ramo.area}</div>
           <div class="status">${statusText}</div>
+
           ${ramo.prereq.length ? `<p class="meta">Prerreq: ${ramo.prereq.join(", ")}</p>` : ""}
+
+          <div class="actions">
+            <button data-set="pendiente">Pendiente</button>
+            <button data-set="curso">En curso</button>
+            <button data-set="aprobado">Aprobado</button>
+          </div>
         </div>
       `;
 
+      // Botones estado
+      card.querySelectorAll(".actions button").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (bloqueado) return;
+
+          const next = btn.dataset.set;
+          setEstado(ramo.id, next);
+          guardarEstado();
+          render();
+        });
+      });
+
+      // tap en tarjeta: ciclo rápido (opcional)
       card.addEventListener("click", () => {
         if (bloqueado) return;
-        const next = cicloEstado(est);
+        const current = getEstado(ramo.id);
+        const next = current === "pendiente" ? "curso" : (current === "curso" ? "aprobado" : "pendiente");
         setEstado(ramo.id, next);
         guardarEstado();
         render();
       });
 
-      box.appendChild(card);
+      body.appendChild(card);
     }
 
     elMalla.appendChild(box);
   }
 }
 
-/* -------------------- Export / Import (Opción A) -------------------- */
+/* -------------------- Export / Import -------------------- */
 function initExportImport(){
   const btnExport = document.getElementById("btnExport");
   const fileImport = document.getElementById("fileImport");
